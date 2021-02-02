@@ -12,11 +12,22 @@ pub fn is_prime(n:u32) -> bool {
 
 pub fn factors(n: u64) -> Vec<u64> {
     let mut factors: Vec<u64> = Vec::new();
-    let divident = n;
-    let result;
+    let mut divident = n;
+    let mut result = 1;
     for i in 2..=n {
         if is_prime(i as u32) {
             // if prime
+            while divident != 0 && divident % i == 0 {
+                divident = divident / i;
+                factors.push(i);
+                result = result * i;
+                if result == n {
+                    break;
+                }
+            }
+        }
+        if result == n {
+            break;
         }
     }
     factors
