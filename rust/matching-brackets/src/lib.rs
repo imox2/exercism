@@ -18,13 +18,13 @@ pub fn brackets_are_balanced(string: &str) -> bool {
             // check start
             if char_inverse_map_start.contains_key(&char) {
                 // push to stack
-                stack.push(convert_option_to_value(char_inverse_map_start.get(&char)).chars().nth(0).unwrap());
+                stack.push(convert_option_to_value(char_inverse_map_start.get(&char)).chars().next().unwrap());
             } else {
                 let stack_top = convert_option_to_value(stack.last());
-                if stack_top != "Not Found" && stack_top.chars().nth(0).unwrap() == char {
+                if stack_top != "Not Found" && stack_top.chars().next().unwrap() == char {
                     stack.pop();
                 } else {
-                    stack.push(convert_option_to_value(char_inverse_map_start.get(&char)).chars().nth(0).unwrap());
+                    stack.push(convert_option_to_value(char_inverse_map_start.get(&char)).chars().next().unwrap());
                 }
             }
         }
