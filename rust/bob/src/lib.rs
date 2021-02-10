@@ -1,25 +1,23 @@
-use regex::Regex;
+const SIMPLE_QUESTION: &str = "Sure.";
+const YELL: &str = "Whoa, chill out!";
+const YELL_QUESTION: &str = "Calm down, I know what I'm doing!";
+const EMPTY: &str = "Fine. Be that way!";
+const DEFAULT: &str = "Whatever.";
 
-pub fn reply(message: &str) -> String {
-    let answer;
-    let all_spaces = Regex::new(r"^\s+$").unwrap();
-    let all_one_uppercase = Regex::new(r".*[A-Z]").unwrap();
-    if message.is_empty() || all_spaces.is_match(message) {
-        answer = "Fine. Be that way!".to_string();
-    } else {
-        let last_char = message.trim().chars().last().unwrap();
-        let re = Regex::new(r"^[^a-z]*$").unwrap();
-        if re.is_match(message) && all_one_uppercase.is_match(message) {
-            if last_char == '?' {
-                answer = "Calm down, I know what I'm doing!".to_string();
-            } else {
-                answer = "Whoa, chill out!".to_string();
-            }
-        } else if last_char == '?' {
-            answer = "Sure.".to_string();
-        } else {
-            answer = "Whatever.".to_string();
-        }
+pub fn reply(message: &str) -> &str {
+    let message = message.trim();
+    match message.trim() {
+        m if m == "" => EMPTY,
+        m if is_yelling(m) && is_question(m) => YELL_QUESTION,
+        m if is_yelling(m) => YELL,
+        m if is_question(m) => SIMPLE_QUESTION,
+        _ => DEFAULT,
     }
-    answer
+}
+
+fn is_yelling(message: &str) -> bool {
+    message.chars().any(|c| c.is_alphabetic()) && message.chars().all(|c| !c.is_lowercase())
+}
+fn is_question(message: &str) -> bool {
+    message.chars().last() == Some('?')
 }
